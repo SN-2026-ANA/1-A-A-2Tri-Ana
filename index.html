@@ -647,7 +647,7 @@
       document.getElementById('hist-meta').textContent = `Consultando histórico VRA de ${escapeHtml(icao)} em ${anoMes}...`;
       try {
         const dados = await sbFetch(
-          `historico_vra?or=(icao_origem.eq.${icao},icao_destino.eq.${icao})` +
+          `historico_vra?or=(icao_origem.eq.${encodeURIComponent(icao)},icao_destino.eq.${encodeURIComponent(icao)})` +
           `&ano_mes=eq.${anoMes}&order=dt_referencia.asc&limit=1000`
         );
         histAll = dados; pagHist = 1;
