@@ -35,7 +35,15 @@ passo D4 do gabarito.
   - **1-A e 2-A:** URL, codificação e cabeçalho do CSV real do VRA no
     `fetch_historico_anac.py`.
 - Avisou que o `sql/setup.sql` não estava entre os arquivos do Drive nem no
-  projeto base.
+  projeto base. Depois que ele foi enviado, a IA aplicou o ajuste 1-A do banco
+  (`security_invoker` na view `voos_completo`).
+- Colocou a Project URL e a chave `anon` no `index.html`, ativou o GitHub
+  Pages e criou a variável `AIRPORTS`, corrigindo a lista do gabarito: nela,
+  SBGL e SBPA aparecem duas vezes, e SBSN e SBRB estão faltando.
+- Disparou os dois workflows e conferiu os dados pela API pública. O VRA de
+  agosto ainda não estava publicado, então a importação foi feita com julho de
+  2026.
+- Organizou os prints e escreveu o `testes/README.md`.
 
 ## O que foi feito manualmente (sem IA)
 
