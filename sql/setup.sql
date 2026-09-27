@@ -94,6 +94,9 @@ FROM voos v
 LEFT JOIN aeroportos ao ON ao.icao = v.icao_origem
 LEFT JOIN aeroportos ad ON ad.icao = v.icao_destino;
 
+-- A view respeita o RLS de quem consulta (ajuste 1-A do gabarito)
+ALTER VIEW voos_completo SET (security_invoker = on);
+
 
 -- ── 5. RLS — Segurança por linha ─────────────────────────────────────────────
 -- Nota sobre chaves:
