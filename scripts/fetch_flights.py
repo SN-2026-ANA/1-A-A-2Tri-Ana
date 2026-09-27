@@ -158,6 +158,23 @@ def normalizar_voo(f: dict) -> dict:
     }
 
 
+CHAVE_UNICA = ("data_referencia", "icao_empresa", "numero_voo",
+               "icao_origem", "icao_destino", "etapa")
+
+
+def deduplicar(registros: list) -> tuple[list, int]:
+    """Remove duplicatas pela mesma chave da constraint voos_unique.
+
+    O upsert do Supabase falha se um mesmo lote tiver duas linhas com a mesma
+    chave (ON CONFLICT DO UPDATE não pode afetar a mesma linha duas vezes).
+    Mantém a última ocorrência de cada voo. Retorna (únicos, qtd_removidos).
+    """
+    unicos = {}
+    for r in registros:
+        unicos[tuple(r[c] for c in CHAVE_UNICA)] = r
+    return list(unicos.values()), len(registros) - len(unicos)
+
+
 def registrar_execucao(
     aeroportos: list,
     voos_processados: int,
@@ -206,6 +223,9 @@ for f in todos_voos:
     registros.append(normalizar_voo(f))
 
 print(f"\nRegistros filtrados para os aeroportos configurados: {len(registros)}")
+
+registros, duplicados = deduplicar(registros)
+print(f"  Duplicados removidos antes do envio: {duplicados}")
 print(
     "  Obs: o upsert usa constraint voos_unique "
     "(data_referencia + icao_empresa + numero_voo + icao_origem + icao_destino + etapa). "
