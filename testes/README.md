@@ -75,3 +75,42 @@ Consulta de SBCA em julho de 2026: 358 voos, 341 realizados, 17 cancelados e
 atraso médio de 27 minutos na partida.
 
 ![Painel histórico](painel-historico.png)
+
+## Correção da atividade
+
+Verificação dos três itens enviados pelo professor como correção.
+
+### A — Consultas de diagnóstico no banco (ajuste 1-C)
+
+| Consulta | Resultado |
+|---|---|
+| 1. Total de registros em `voos` | 2631 |
+| 2. Datas existentes | 2026-09-27, com 2631 voos |
+| 3. Cinco registros mais recentes | 5 voos de 2026-09-27, inseridos às 18:49 UTC |
+| 4. Log de execuções | 2 execuções `concluido`: 2631 processados, 6 lotes, 0 erros |
+
+A consulta 4 mostra que o pipeline registrou as duas execuções sem erro.
+
+![Consulta 1](consulta-1-total-voos.png)
+![Consulta 2](consulta-2-datas.png)
+![Consulta 3](consulta-3-recentes.png)
+![Consulta 4](consulta-4-execucoes.png)
+
+### B — Remoção de duplicatas no fetch_flights.py (ajuste 1-B)
+
+A função `deduplicar` foi aplicada antes do envio em lotes. O PostgreSQL não
+aceita que o mesmo `ON CONFLICT DO UPDATE` afete a mesma linha duas vezes na
+mesma operação. Na 2ª execução do pipeline, ela removeu 5.265 voos repetidos
+devolvidos pela API SIROS (veja `workflow-v2-log.png`).
+
+### C — Link correto do VRA (ajustes 1-A e 2-A)
+
+O script usa a estrutura
+`/Voos e operações aéreas/Voo Regular Ativo (VRA)/AAAA/MM - Mês/VRA_AAAAM.csv`.
+O log da importação mostra o arquivo de julho de 2026 baixado, o cabeçalho real
+da ANAC detectado na linha 2 e os 160 lotes enviados sem erro. O Summary do run
+resume a importação.
+
+![Log do VRA — início](vra-log-inicio.png)
+![Log do VRA — fim](vra-log-fim.png)
+![Summary do VRA](vra-summary.png)
